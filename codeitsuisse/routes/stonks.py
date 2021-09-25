@@ -47,7 +47,7 @@ def getprice(timeline):
 
 def maxprofit(energy,capital,stock):
     # TODO pretend only one stock
-    length = (energy//2) *2
+    length = min( (energy//2) *2 , len(stock['price']))
     prices_go = stock['price'][-length//2:]
     prices_back = stock['price'][-length//2::-1]
     qtys = stock['qty'][-length:]
