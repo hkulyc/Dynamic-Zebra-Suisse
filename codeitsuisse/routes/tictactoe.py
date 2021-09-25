@@ -195,11 +195,12 @@ def tictactoe():
                     my_turn = True
                     break
                 else:
-                    if move == None or pos != pos_map[move]:
-                        res = create_action(None)
-                        logging.info("My move: {}".format(res))
-                        requests.post(url = arena+'play/'+id, json = res)
-                    break
+                    # if move != None and pos != pos_map[move]:
+                    #     res = create_action(None)
+                    #     logging.info("My move: {}".format(res))
+                    #     requests.post(url = arena+'play/'+id, json = res)
+                    # break
+                    None
     # inputValue = data.get("input");
     # result = inputValue * inputValue
     logging.info('tictactoe finished!')
