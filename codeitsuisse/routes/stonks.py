@@ -51,7 +51,7 @@ def maxprofit(energy,capital,stock):
     prices_go = stock['price'][-len:]
     prices_back = stock['price'][-len::-1]
     qtys_go = stock['qty'][-len:]
-    qtys_back = stock['qty'][-len::-1]
+
     result = {}
     # inital 
     amount = min(qtys[0],int(capital/prices[0]))
