@@ -1,4 +1,3 @@
-from _typeshed import NoneType
 import logging
 import json
 from typing import Collection
@@ -45,18 +44,12 @@ class Board:
                 p1[str(i)+','+str(j)] = -1
 
         
-                 
-
-                    
-
-
-
 
 @app.route('/parasite', methods=['POST'])
 def parasite():
     datas = request.get_json()
     res = []
-    logging.info("tictactoe received: {}".format(datas))
+    logging.info("received: {}".format(datas))
     for index,data in enumerate(datas):
         res_dic = {'room':index}
         board = Board(data['grid'],data['interestedIndividuals'])
