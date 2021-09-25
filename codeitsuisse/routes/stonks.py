@@ -7,6 +7,16 @@ from codeitsuisse import app
 
 logger = logging.getLogger(__name__)
 
+"""
+ile "/app/codeitsuisse/routes/stonks.py", line 22, in stonks
+2021-09-25T06:56:47.567908+00:00 app[web.1]:     profit,output = maxprofit(energy,capital,stocks_dic[stock])
+2021-09-25T06:56:47.567909+00:00 app[web.1]:   File "/app/codeitsuisse/routes/stonks.py", line 58, in maxprofit
+2021-09-25T06:56:47.567909+00:00 app[web.1]:     temp_list = [result[k][i-1] + (j-k) * price[i] for k in range(len(result)) ]
+2021-09-25T06:56:47.567909+00:00 app[web.1]:   File "/app/codeitsuisse/routes/stonks.py", line 58, in <listcomp>
+2021-09-25T06:56:47.567910+00:00 app[web.1]:     temp_list = [result[k][i-1] + (j-k) * price[i] for k in range(len(result)) ]
+2021-09-25T06:56:47.567910+00:00 app[web.1]: TypeError: 'int' object is not subscriptable
+"""
+
 @app.route('/stonks', methods=['POST'])
 def stonks():
     datas = request.get_json()
@@ -55,7 +65,7 @@ def maxprofit(energy,capital,stock):
             money = result[j][i-1] # money you have 
             price = prices[i]
             buy_amount = min( money // price, result['qty'+str(i)][i%(length//2)])
-            temp_list = [result[k][i-1] + (j-k) * price[i] for k in range(len(result)) ]
+            temp_list = [result[k][i-1] + (j-k) * prices[i] for k in range(len(result)) ]
             result[j][i] =  max(temp_list) # this year 
             result['qty'+str(j)][i%(length//2)] -= (j-temp_list.index(result[j][i])) if  (j-temp_list.index(result[j][i])) > 0 else 0
             if j + buy_amount > len(result) :
@@ -66,7 +76,8 @@ def maxprofit(energy,capital,stock):
                     result['qty'+str(j)] -= k+1
         if len(result) == 0:
             for i in range(min(qtys[0],int(capital/prices_go[0]))+1):
-                result = { i:[-i*prices[0] for _ in range(length)],'qty'+str(i): [ j for j in qtys]}
+                result[i] = [-i*prices[0] for _ in range(length)]
+                result['qty'+str(i)] = [ j for j in qtys]
                 result['qty'+str(i)][0] -= i
     
     return result[0][length-1],result['qty0']
