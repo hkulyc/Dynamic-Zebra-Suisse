@@ -20,13 +20,13 @@ ile "/app/codeitsuisse/routes/stonks.py", line 22, in stonks
 @app.route('/stonks', methods=['POST'])
 def stonks():
     datas = request.get_json()
+    logging.info("received :{} ".format(datas))
     #logging.info("data sent for evaluation {}".format(data))
     for data in datas:
         energy = data.get("energy")
         capital = data.get("capital")
         timeline = data.get("timeline")
         stocks_dic = getprice(timeline)
-        logging.info("My stocks_dic :{}\n energy: {}\n capital: {} ".format(stocks_dic,energy,capital))
         profit_res,output_res = 0,None
         for stock in stocks_dic.keys():
             profit,output = maxprofit(energy,capital,stocks_dic[stock])
