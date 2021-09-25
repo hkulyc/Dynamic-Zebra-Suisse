@@ -146,6 +146,7 @@ def tictactoe():
     r = r[6:]
     # extracting data in json format
     data = json.loads(r)
+    logging.info("tictactoe received: {}".format(data))
     new_game.setSymbol(data.get('youAre'))
 
     my_turn = (new_game.symbol == '0')
