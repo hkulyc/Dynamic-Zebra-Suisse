@@ -14,7 +14,7 @@ class Board:
         self.board = board
         self.row = len(board)
         self.col = len(board[0])
-        self.interest = [(int(i),int(j)) for i,j in interest.split(',')]
+        self.interest = [(int(i[0]),int(j[2])) for i in interest ]
         self.start_x,self.start_y = None,None
         self.findstartpoint()
     def __repr__(self) -> str:
