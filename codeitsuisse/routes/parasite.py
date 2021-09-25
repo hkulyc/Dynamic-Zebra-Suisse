@@ -1,6 +1,5 @@
 import logging
 import json
-from typing import Collection
 
 from flask import request, jsonify
 import requests
