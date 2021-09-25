@@ -201,10 +201,9 @@ def decode_pos(pos):
 
 @app.route('/quoridor', methods=['POST'])
 def quoridor():
-    try:
-        return main(request)
-    except:
-        return ''
+    return main(request)
+    # except:
+    #     return ''
 
 def main(request):
     data = request.get_json()
@@ -221,7 +220,7 @@ def main(request):
     logging.info("quoridor received: {}".format(data))
     new_game.setSymbol(data.get('youAre'))
     # logging.info("symbol: {}".format(new_game.symbol))
-    my_turn = (new_game.symbol == 'First')
+    my_turn = (new_game.symbol == 'first')
     while data.get('winner') == None:
         if my_turn:
             pos = new_game.nextMove()
