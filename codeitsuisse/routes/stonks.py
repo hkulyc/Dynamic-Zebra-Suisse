@@ -26,7 +26,7 @@ def stonks():
         capital = data.get("capital")
         timeline = data.get("timeline")
         stocks_dic = getprice(timeline)
-        logging.info("My stocks_dic :{}".format(stocks_dic))
+        logging.info("My stocks_dic :{}\n energy: {}\n capital: {} ".format(stocks_dic,energy,capital))
         profit_res,output_res = 0,None
         for stock in stocks_dic.keys():
             profit,output = maxprofit(energy,capital,stocks_dic[stock])
@@ -59,9 +59,13 @@ def maxprofit(energy,capital,stock):
         result['qty'+str(i)] = [ j for j in qtys]
         result['qty'+str(i)][0] -= i
     logging.info("logging :{}".format(result))
+    logging.info("prices :{}".format(prices))
+    logging.info("length :{}".format(length))
+    #dp 
+    #dp 
     #dp 
     for i in range(1,length): # for every year
-        for j in range(len(result)): # for diferent result 
+        for j in range(len(result)// 2): # for diferent result 
             money = result[j][i-1] # money you have 
             price = prices[i]
             buy_amount = min( 0, money // price, result['qty'+str(i)][i%(length//2)])
