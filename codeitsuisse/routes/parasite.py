@@ -29,7 +29,9 @@ class Board:
         px = [-1, 0, 1, 0]
         py = [0, -1, 0, 1]
         board = [ [ 100 for i in range(self.col)] for _ in range(self.row)]
+        visited = [ [ False for i in range(self.col)] for _ in range(self.row)]
         board[self.start_x][self.start_y] = 0
+        visited[self.start_x][self.start_y] = True
         queue.append( (self.start_x,self.start_y) )
         while len(queue) > 0:
             x,y = queue.pop()
@@ -37,6 +39,7 @@ class Board:
                 go_x,go_y = x+px[i],y+py[i]
                 if go_x < self.row and go_x>0 and go_y < self.col and go_y > 0 and self.board[go_x][go_y] != 0 :
                     board[go_x][go_y] = min( board[x][y]  + 1,board[x][y] )
+                    visited[go_x][go_y] = True
                     queue.append( (go_x,go_y) )
         for i,j in self.interest:
             if self.board[go_x][go_y] != 0:
