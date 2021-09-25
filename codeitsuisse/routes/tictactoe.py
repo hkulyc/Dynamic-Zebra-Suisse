@@ -134,6 +134,13 @@ def create_action(pos):
     else:
         res['action'] = 'putSymbol'
         res['position'] = pos_map[pos]
+    return res
+
+def get_hook(r, *args, **kwargs):
+    data = r.text
+    data = data[6:]
+    # extracting data in json format
+    data = json.loads(data)
 
 
 @app.route('/tic-tac-toe', methods=['POST'])
