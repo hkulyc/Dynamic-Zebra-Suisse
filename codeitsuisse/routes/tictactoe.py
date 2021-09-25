@@ -178,9 +178,9 @@ def tictactoe():
                 data = data[6:]
                 data = json.loads(data)
                 logging.info("tictactoe received: {}".format(data))
-                if data.get['player'] == None:
+                if data.get('player') == None:
                     break
-                if data.get['player'] != new_game.symbol:
+                if data.get('player') != new_game.symbol:
                     pos_string = data['position']
                     pos = list(pos_map.keys())[list(pos_map.values()).index(pos_string)]
                     if not new_game.add(pos, True):
