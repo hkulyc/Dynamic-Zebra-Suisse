@@ -168,7 +168,7 @@ def tictactoe():
             res = create_action(move)
             logging.info("My move: {}".format(res))
             new_game.add(move, False)
-            requests.post(url = arena+'play/'+id, data = json.dumps(res))
+            requests.post(url = arena+'play/'+id, json = res)
             my_turn = False
             None
         else:
@@ -182,18 +182,18 @@ def tictactoe():
                 logging.info("tictactoe received: {}".format(data))
                 if data.get('player') == None:
                     break
-                if data.get('player') != new_game.symbol:
-                    pos_string = data.get('position')
+                pos_string = data.get('position')
+                pos = None
+                try:
+                    pos = list(pos_map.keys())[list(pos_map.values()).index(pos_string)]
+                except:
                     pos = None
-                    try:
-                        pos = list(pos_map.keys())[list(pos_map.values()).index(pos_string)]
-                    except:
-                        pos = None
+                if data.get('player') != new_game.symbol:
                     if not new_game.add(pos, True):
                         res = create_action(None)
                         logging.info("My move: {}".format(res))
                         new_game.add(move, False)
-                        requests.post(url = arena+'play/'+id, data = json.dumps(res))
+                        requests.post(url = arena+'play/'+id, json = res)
                         return ''
                     my_turn = True
                     break
