@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 @app.route('/stonks', methods=['POST'])
 def stonks():
     datas = request.get_json()
-
     #logging.info("data sent for evaluation {}".format(data))
     for data in datas:
         energy = data.get("energy")
@@ -47,7 +46,7 @@ def maxprofit(energy,capital,stock):
     for i in range(min(qtys[0],int(capital/prices_go[0]))+1):
         result = { i:[-i*prices[0] for _ in range(length)],'qty'+str(i): [ j for j in qtys]}
         result['qty'+str(i)][0] -= i
-    
+    logging.info("My profit :{}".format(result))
     # dp 
     for i in range(1,length): # for every year
         for j in range(len(result)): # for diferent result 
@@ -72,6 +71,16 @@ def maxprofit(energy,capital,stock):
 
 
 
-    
+if __name__ == "__main__":
+    test = TicTacToe('asdf', '35efas')
+    test.setSymbol('0')
+    while True:
+        x = int(input())
+        y = int(input())
+        test.add((x,y), True)
+        res = test.nextMove()
+        print(res)
+        test.add(res, False)
+        test.print()
 
 
