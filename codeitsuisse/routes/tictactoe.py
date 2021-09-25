@@ -103,6 +103,7 @@ class TicTacToe:
             self.board[pos[0]][pos[1]] = 'c'
         else:
             self.board[pos[0]][pos[1]] = 'i'
+        self.firstMove = False
         return True
     
     def nextMove(self):
@@ -162,13 +163,14 @@ def tictactoe():
     my_turn = (new_game.symbol == 'O')
 
     while data.get('winner') == None:
-        if my_turn:
-            move = new_game.nextMove()
-            res = create_action(move)
-            logging.info("My move: {}".format(res))
-            new_game.add(move, False)
-            requests.post(url = arena+'play/'+id, data = json.dumps(res))
-            my_turn = False
+        if False:
+            # move = new_game.nextMove()
+            # res = create_action(move)
+            # logging.info("My move: {}".format(res))
+            # new_game.add(move, False)
+            # requests.post(url = arena+'play/'+id, data = json.dumps(res))
+            # my_turn = False
+            None
         else:
             while True:
                 # r = requests.get(url = arena+'start/'+id, stream = True)
@@ -195,6 +197,13 @@ def tictactoe():
                         return ''
                     my_turn = True
                     break
+                else:
+                    move = new_game.nextMove()
+                    res = create_action(move)
+                    logging.info("My move: {}".format(res))
+                    new_game.add(move, False)
+                    requests.post(url = arena+'play/'+id, data = json.dumps(res))
+                    my_turn = False
 
     result = {}
     # inputValue = data.get("input");
