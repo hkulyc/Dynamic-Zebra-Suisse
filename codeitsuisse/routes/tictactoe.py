@@ -161,7 +161,7 @@ def tictactoe():
     new_game.setSymbol(data.get('youAre'))
     # logging.info("symbol: {}".format(new_game.symbol))
     my_turn = (new_game.symbol == 'O')
-
+    move = None
     while data.get('winner') == None:
         if my_turn:
             move = new_game.nextMove()
@@ -173,40 +173,33 @@ def tictactoe():
             None
         else:
             # r = requests.get(url = arena+'start/'+id, stream = True)
-            data = next(r)
-            while data == b'':
+            while True:
                 data = next(r)
-            data = data[6:]
-            data = json.loads(data)
-            logging.info("tictactoe received: {}".format(data))
-            if data.get('player') != new_game.symbol:
-                res = create_action(None)
-                logging.info("My move: {}".format(res))
-                requests.post(url = arena+'play/'+id, json = res)
-                break
-            
-            data = next(r)
-            while data == b'':
-                data = next(r)
-            data = data[6:]
-            data = json.loads(data)
-            logging.info("tictactoe received: {}".format(data))
-            pos_string = data.get('position')
-            pos = None
-            try:
-                pos = list(pos_map.keys())[list(pos_map.values()).index(pos_string)]
-            except:
+                while data == b'':
+                    data = next(r)
+                data = data[6:]
+                data = json.loads(data)
+                logging.info("tictactoe received: {}".format(data))
+                pos_string = data.get('position')
                 pos = None
-            if data.get('player') != new_game.symbol:
-                if not new_game.add(pos, True):
-                    res = create_action(None)
-                    logging.info("My move: {}".format(res))
-                    requests.post(url = arena+'play/'+id, json = res)
+                try:
+                    pos = list(pos_map.keys())[list(pos_map.values()).index(pos_string)]
+                except:
+                    pos = None
+                if data.get('player') != new_game.symbol:
+                    if not new_game.add(pos, True):
+                        res = create_action(None)
+                        logging.info("My move: {}".format(res))
+                        requests.post(url = arena+'play/'+id, json = res)
+                        break
+                    my_turn = True
                     break
-                my_turn = True
-                break
-            else:
-                None
+                else:
+                    if move == None or pos != pos_map[move]:
+                        res = create_action(None)
+                        logging.info("My move: {}".format(res))
+                        requests.post(url = arena+'play/'+id, json = res)
+                    break
     # inputValue = data.get("input");
     # result = inputValue * inputValue
     logging.info('tictactoe finished!')
