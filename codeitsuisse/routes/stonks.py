@@ -20,13 +20,13 @@ ile "/app/codeitsuisse/routes/stonks.py", line 22, in stonks
 @app.route('/stonks', methods=['POST'])
 def stonks():
     datas = request.get_json()
+    logging.info("received :{} ".format(datas))
     #logging.info("data sent for evaluation {}".format(data))
     for data in datas:
         energy = data.get("energy")
         capital = data.get("capital")
         timeline = data.get("timeline")
         stocks_dic = getprice(timeline)
-        logging.info("My stocks_dic :{}\n energy: {}\n capital: {} ".format(stocks_dic,energy,capital))
         profit_res,output_res = 0,None
         for stock in stocks_dic.keys():
             profit,output = maxprofit(energy,capital,stocks_dic[stock])
@@ -47,7 +47,7 @@ def getprice(timeline):
 
 def maxprofit(energy,capital,stock):
     # TODO pretend only one stock
-    length = min( (energy//2) *2 , len(stock['price']))
+    length = min( (energy//2) *2 , len(stock['price'] ) )
     prices_go = stock['price'][-length//2:]
     prices_back = stock['price'][-length//2::-1]
     qtys = stock['qty'][-length:]
@@ -61,8 +61,6 @@ def maxprofit(energy,capital,stock):
     logging.info("logging :{}".format(result))
     logging.info("prices :{}".format(prices))
     logging.info("length :{}".format(length))
-    #dp 
-    #dp 
     #dp 
     for i in range(1,length): # for every year
         for j in range(len(result)// 2): # for diferent result 
