@@ -109,7 +109,7 @@ class TicTacToe:
         "return a position"
         res = None
         if self.firstMove:
-            if self.board[1][1] != 0:
+            if self.board[1][1] == 0:
                 res = (1,1)
             else:
                 # find diagnal
@@ -151,6 +151,8 @@ def tictactoe():
     new_game = TicTacToe(arena, id)
     r = requests.get(url = arena+'start/'+id, stream = True).iter_lines()
     data = next(r)
+    while data == b'':
+        data = next(r)
     data = data[6:]
     # extracting data in json format
     data = json.loads(data)
@@ -171,6 +173,8 @@ def tictactoe():
             while True:
                 # r = requests.get(url = arena+'start/'+id, stream = True)
                 data = next(r)
+                while data == b'':
+                    data = next(r)
                 data = data[6:]
                 data = json.loads(data)
                 if data.get['player'] == None:
