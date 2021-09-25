@@ -163,13 +163,13 @@ def tictactoe():
     my_turn = (new_game.symbol == 'O')
 
     while data.get('winner') == None:
-        if False:
-            # move = new_game.nextMove()
-            # res = create_action(move)
-            # logging.info("My move: {}".format(res))
-            # new_game.add(move, False)
-            # requests.post(url = arena+'play/'+id, data = json.dumps(res))
-            # my_turn = False
+        if my_turn:
+            move = new_game.nextMove()
+            res = create_action(move)
+            logging.info("My move: {}".format(res))
+            new_game.add(move, False)
+            requests.post(url = arena+'play/'+id, data = json.dumps(res))
+            my_turn = False
             None
         else:
             while True:
@@ -198,12 +198,7 @@ def tictactoe():
                     my_turn = True
                     break
                 else:
-                    move = new_game.nextMove()
-                    res = create_action(move)
-                    logging.info("My move: {}".format(res))
-                    new_game.add(move, False)
-                    requests.post(url = arena+'play/'+id, data = json.dumps(res))
-                    my_turn = False
+                    None
 
     result = {}
     # inputValue = data.get("input");
