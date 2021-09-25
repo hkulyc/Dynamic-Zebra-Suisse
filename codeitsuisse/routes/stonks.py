@@ -62,7 +62,7 @@ def maxprofit(energy,capital,stock):
     #dp 
     for i in range(1,length): # for every year
         for j in range(len(result)): # for diferent result 
-            money = result[j][i-1] if result[j][i-1]  # money you have 
+            money = result[j][i-1] # money you have 
             price = prices[i]
             buy_amount = min( 0, money // price, result['qty'+str(i)][i%(length//2)])
             temp_list = [result[k][i-1] + (j-k)*prices[i] for k in range(len(result)) ]
