@@ -18,7 +18,7 @@ class Board:
         self.start_x,self.start_y = None,None
         self.findstartpoint()
     def __repr__(self) -> str:
-        return str(self.board),str(self.start_x),str(self.start_y)
+        return str(self.board)+str(self.start_x)+str(self.start_y)
     def findstartpoint(self):
         for i,row in enumerate(self.board):
             for j,value in enumerate(row):
