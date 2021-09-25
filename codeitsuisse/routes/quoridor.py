@@ -165,6 +165,7 @@ class Quoridor:
                 y = int(pos[1])
                 self.bound.add(((x, y), (x+1, y)))
                 self.bound.add(((x, y+1), (x+1, y+1)))
+            return True
         except:
             return False
     
@@ -254,13 +255,22 @@ def main(request):
                     break
                     # return ''
                 if data.get('player') != new_game.symbol:
-                    if not new_game.move(pos, True):
+                    if not (pos_string.endswith('h') or pos_string.endswith('v')) and not new_game.move(pos, True):
                         res = flip()
                         logging.info("My move: {}".format(res))
                         requests.post(url = arena+'play/'+id, json = res)
                         break
                     my_turn = True
                     break
+                elif pos_string.endswith('h') or pos_string.endswith('v'):
+                    if new_game.add_wall(pos_string):
+                        my_turn = True
+                        break
+                    else:
+                        res = flip()
+                        logging.info("My move: {}".format(res))
+                        requests.post(url = arena+'play/'+id, json = res)
+                        break
                 else:
                     # if move != None and pos != pos_map[move]:
                     #     res = create_action(None)
