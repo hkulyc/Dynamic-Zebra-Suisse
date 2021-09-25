@@ -47,7 +47,7 @@ def getprice(timeline):
 
 def maxprofit(energy,capital,stock):
     # TODO pretend only one stock
-    length = min( (energy//2) *2 , len(stock['price']))
+    length = min( (energy//2) *2 , len(stock['price'] ) )
     prices_go = stock['price'][-length//2:]
     prices_back = stock['price'][-length//2::-1]
     qtys = stock['qty'][-length:]
@@ -61,8 +61,6 @@ def maxprofit(energy,capital,stock):
     logging.info("logging :{}".format(result))
     logging.info("prices :{}".format(prices))
     logging.info("length :{}".format(length))
-    #dp 
-    #dp 
     #dp 
     for i in range(1,length): # for every year
         for j in range(len(result)// 2): # for diferent result 
