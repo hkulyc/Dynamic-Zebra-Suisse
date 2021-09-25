@@ -103,14 +103,15 @@ class TicTacToe:
             self.board[pos[0]][pos[1]] = 'c'
         else:
             self.board[pos[0]][pos[1]] = 'i'
+        self.firstMove = False
         return True
     
     def nextMove(self):
         "return a position"
         res = None
         if self.firstMove:
-            if self.board[1][1] != 0:
-                res = (0,0)
+            if self.board[1][1] == 0:
+                res = (1,1)
             else:
                 # find diagnal
 
@@ -134,6 +135,13 @@ def create_action(pos):
     else:
         res['action'] = 'putSymbol'
         res['position'] = pos_map[pos]
+    return res
+
+def get_hook(r, *args, **kwargs):
+    data = r.text
+    data = data[6:]
+    # extracting data in json format
+    data = json.loads(data)
 
 
 @app.route('/tic-tac-toe', methods=['POST'])
@@ -142,13 +150,17 @@ def tictactoe():
     logging.info("tictactoe received: {}".format(data))
     id = data.get('battleId')
     new_game = TicTacToe(arena, id)
-    r = requests.get(url = arena+'start/'+id).text
-    r = r[6:]
+    r = requests.get(url = arena+'start/'+id, stream = True).iter_lines()
+    data = next(r)
+    while data == b'':
+        data = next(r)
+    data = data[6:]
     # extracting data in json format
-    data = json.loads(r)
+    data = json.loads(data)
+    logging.info("tictactoe received: {}".format(data))
     new_game.setSymbol(data.get('youAre'))
-
-    my_turn = (new_game.symbol == '0')
+    # logging.info("symbol: {}".format(new_game.symbol))
+    my_turn = (new_game.symbol == 'O')
 
     while data.get('winner') == None:
         if my_turn:
@@ -158,15 +170,25 @@ def tictactoe():
             new_game.add(move, False)
             requests.post(url = arena+'play/'+id, data = json.dumps(res))
             my_turn = False
+            None
         else:
             while True:
-                r = requests.get(url = arena+'start/'+id).text[6:]
-                data = json.loads(r)
-                if data.get['player'] == None:
+                # r = requests.get(url = arena+'start/'+id, stream = True)
+                data = next(r)
+                while data == b'':
+                    data = next(r)
+                data = data[6:]
+                data = json.loads(data)
+                logging.info("tictactoe received: {}".format(data))
+                if data.get('player') == None:
                     break
-                if data.get['player'] != new_game.symbol:
-                    pos_string = data['position']
-                    pos = list(pos_map.keys())[list(pos_map.values()).index(pos_string)]
+                if data.get('player') != new_game.symbol:
+                    pos_string = data.get('position')
+                    pos = None
+                    try:
+                        pos = list(pos_map.keys())[list(pos_map.values()).index(pos_string)]
+                    except:
+                        pos = None
                     if not new_game.add(pos, True):
                         res = create_action(None)
                         logging.info("My move: {}".format(res))
@@ -175,6 +197,8 @@ def tictactoe():
                         return ''
                     my_turn = True
                     break
+                else:
+                    None
 
     result = {}
     # inputValue = data.get("input");
