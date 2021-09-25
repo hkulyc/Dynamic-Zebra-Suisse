@@ -181,14 +181,17 @@ def main(request):
                 data = json.loads(data)
                 logging.info("tictactoe received: {}".format(data))
                 pos_string = data.get('position', None)
-                if pos_string == None:
-                    data = {'winner': 'me'}
-                    break
                 pos = None
                 try:
                     pos = list(pos_map.keys())[list(pos_map.values()).index(pos_string)]
                 except:
                     pos = None
+                if pos == None:
+                    data = {'winner': 'me'}
+                    res = create_action(None)
+                    logging.info("My move: {}".format(res))
+                    requests.post(url = arena+'play/'+id, json = res)
+                    break
                     # return ''
                 if data.get('player') != new_game.symbol:
                     if not new_game.add(pos, True):
