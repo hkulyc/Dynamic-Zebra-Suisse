@@ -9,20 +9,22 @@ logger = logging.getLogger(__name__)
 
 @app.route('/stonks', methods=['POST'])
 def stonks():
-    data = request.get_json()
-    logging.info("data sent for evaluation {}".format(data))
-    energy = data.get("energy")
-    capital = data.get("capital")
-    timeline = data.get("timeline")
-    stocks_dic = getprice(timeline)
-    profit_res,output_res = 0,None
-    for stock in stocks_dic.keys():
-        profit,output = maxprofit(energy,capital,stocks_dic[stock])
-        if profit > profit_res:
-            profit_res,output_res = profit,output
-    logging.info("My profit :{}".format(profit_res))
-    logging.info("My result :{}".format(output_res))
-    return json.dumps(output)
+    datas = request.get_json()
+
+    #logging.info("data sent for evaluation {}".format(data))
+    for data in datas:
+        energy = data.get("energy")
+        capital = data.get("capital")
+        timeline = data.get("timeline")
+        stocks_dic = getprice(timeline)
+        profit_res,output_res = 0,None
+        for stock in stocks_dic.keys():
+            profit,output = maxprofit(energy,capital,stocks_dic[stock])
+            if profit > profit_res:
+                profit_res,output_res = profit,output
+        logging.info("My profit :{}".format(profit_res))
+        logging.info("My result :{}".format(output_res))
+    return json.dumps(output_res)
 def getprice(timeline):
     stocks_dic = {}
     for i in timeline['2037'].keys():
