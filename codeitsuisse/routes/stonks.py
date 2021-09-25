@@ -59,6 +59,10 @@ def maxprofit(energy,capital,stock):
         result['qty'+str(i)] = [ j for j in qtys]
         result['qty'+str(i)][0] -= i
     logging.info("logging :{}".format(result))
+    logging.info("prices :{}".format(prices))
+    logging.info("length :{}".format(length))
+    #dp 
+    #dp 
     #dp 
     for i in range(1,length): # for every year
         for j in range(len(result)// 2): # for diferent result 
