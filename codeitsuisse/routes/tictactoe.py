@@ -2,10 +2,12 @@ import logging
 import json
 
 from flask import request, jsonify
+import requests
 
 from codeitsuisse import app
 
 logger = logging.getLogger(__name__)
+arena = 'https://cis2021-arena.herokuapp.com/tic-tac-toe/'
 
 def findEmpty(board):
     "given a matrix, find the last step to win, return None otherwise"
@@ -122,25 +124,61 @@ class TicTacToe:
             res = findAny(self.board)
         self.firstMove = False
         return res
+    
+pos_map = {(0,0): 'NW', (1,0): 'W', (2,0): 'SW', (0,1): 'N', (1,1): 'C',(2,1): 'S', (0,2): 'NE',(1,2): 'E', (2,2): 'SE'}
 
-def createAction(pos):
+def create_action(pos):
     res = {}
-    pos_map = {(0,0): 'NW', (1,0): 'W', (2,0): 'SW', (0,1): 'N', (1,1): 'C',(2,1): 'S', (0,2): 'NE',(1,2): 'E', (2,2): 'SE'}
     if pos_map.get(pos, None) == None:
-        res[action] = '(╯°□°)╯︵ ┻━┻'
+        res['action'] = '(╯°□°)╯︵ ┻━┻'
     else:
-        res[action] = 'putSymbol'
-        res[position] = pos_map[pos]
+        res['action'] = 'putSymbol'
+        res['position'] = pos_map[pos]
 
 
 @app.route('/tic-tac-toe', methods=['POST'])
 def tictactoe():
     data = request.get_json()
     logging.info("tictactoe received: {}".format(data))
+    id = data.get('battleId')
+    new_game = TicTacToe(arena, id)
+    r = requests.get(url = arena+'start/'+id)
+    r = r[6:]
+    # extracting data in json format
+    data = r.json()
+    new_game.setSymbol(data.get('youAre'))
+
+    my_turn = new_game.symbol == '0'
+
+    while data.get('winner') == None:
+        if my_turn:
+            move = new_game.nextMove()
+            res = create_action(move)
+            logging.info("My move: {}".format(res))
+            new_game.add(move, False)
+            requests.post(url = arena+'play/'+id, data = json.dumps(res))
+            my_turn = False
+        else:
+            while True:
+                r = requests.get(url = arena+'start/'+id)[6:]
+                data = r.json()
+                if data.get['player'] == None:
+                    break
+                if data.get['player'] != new_game.symbol:
+                    pos_string = data['position']
+                    pos = list(pos_map.keys())[list(pos_map.values()).index(pos_string)]
+                    if not new_game.add(pos, True):
+                        res = create_action(None)
+                        logging.info("My move: {}".format(res))
+                        new_game.add(move, False)
+                        requests.post(url = arena+'play/'+id, data = json.dumps(res))
+                    my_turn = True
+                    break
+
     result = {}
     # inputValue = data.get("input");
     # result = inputValue * inputValue
-    logging.info("My result :{}".format(result))
+    logging.info('tictactoe finished!')
     return json.dumps(result)
 
 
