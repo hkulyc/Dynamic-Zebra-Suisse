@@ -197,7 +197,10 @@ def tictactoe():
                     my_turn = True
                     break
                 else:
-                    None
+                    res = create_action(None)
+                    logging.info("My move: {}".format(res))
+                    requests.post(url = arena+'play/'+id, json = res)
+                    break
     # inputValue = data.get("input");
     # result = inputValue * inputValue
     logging.info('tictactoe finished!')
