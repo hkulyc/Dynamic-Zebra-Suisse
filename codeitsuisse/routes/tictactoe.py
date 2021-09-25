@@ -137,15 +137,15 @@ def create_action(pos):
         res['position'] = pos_map[pos]
     return res
 
-def get_hook(r, *args, **kwargs):
-    data = r.text
-    data = data[6:]
-    # extracting data in json format
-    data = json.loads(data)
-
 
 @app.route('/tic-tac-toe', methods=['POST'])
 def tictactoe():
+    try:
+        return main(request)
+    except:
+        return ''
+
+def main(request):
     data = request.get_json()
     logging.info("tictactoe received: {}".format(data))
     id = data.get('battleId')
@@ -180,12 +180,16 @@ def tictactoe():
                 data = data[6:]
                 data = json.loads(data)
                 logging.info("tictactoe received: {}".format(data))
-                pos_string = data.get('position')
+                pos_string = data.get('position', None)
+                if pos_string == None:
+                    data = {'winner': 'me'}
+                    break
                 pos = None
                 try:
                     pos = list(pos_map.keys())[list(pos_map.values()).index(pos_string)]
                 except:
                     pos = None
+                    # return ''
                 if data.get('player') != new_game.symbol:
                     if not new_game.add(pos, True):
                         res = create_action(None)
