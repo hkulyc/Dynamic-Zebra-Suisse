@@ -14,7 +14,7 @@ class Board:
         self.board = board
         self.row = len(board)
         self.col = len(board[0])
-        for i in range(interest):
+        for i in interest:
             a,b = i.spilt(",")
             self.interest.append( (int(a),int(b)) )
         self.start_x,self.start_y = None,None
