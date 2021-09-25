@@ -92,10 +92,16 @@ class TicTacToe:
             print(i)
     
     def add(self, pos, ifComp):
+        try:
+            if self.board[pos[0]][pos[1]] != 0:
+                return False
+        except:
+            return False
         if ifComp:
             self.board[pos[0]][pos[1]] = 'c'
         else:
             self.board[pos[0]][pos[1]] = 'i'
+        return True
     
     def nextMove(self):
         "return a position"
