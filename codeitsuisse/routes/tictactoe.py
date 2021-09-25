@@ -110,7 +110,7 @@ class TicTacToe:
         res = None
         if self.firstMove:
             if self.board[1][1] != 0:
-                res = (0,0)
+                res = (1,1)
             else:
                 # find diagnal
 
@@ -149,10 +149,8 @@ def tictactoe():
     logging.info("tictactoe received: {}".format(data))
     id = data.get('battleId')
     new_game = TicTacToe(arena, id)
-    r = requests.get(url = arena+'start/'+id, stream = True)
-    for line in r.iter_lines():
-        data = line
-        break
+    r = requests.get(url = arena+'start/'+id, stream = True).iter_lines()
+    data = next(r)
     data = data[6:]
     # extracting data in json format
     data = json.loads(data)
@@ -172,9 +170,7 @@ def tictactoe():
         else:
             while True:
                 # r = requests.get(url = arena+'start/'+id, stream = True)
-                for line in r.iter_lines():
-                    data = line
-                    break
+                data = next(r)
                 data = data[6:]
                 data = json.loads(data)
                 if data.get['player'] == None:
