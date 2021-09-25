@@ -80,7 +80,7 @@ def parasite():
     res = []
     #logging.info("received: {}".format(datas))
     for index,data in enumerate(datas):
-        res_dic = {'room':index}
+        res_dic = {'room':data['room']}
         logging.info("received: {}".format(datas))
         board = Board(data['grid'],data['interestedIndividuals'])
         logging.info("board: {}".format(board))
