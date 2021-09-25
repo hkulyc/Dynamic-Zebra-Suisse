@@ -26,7 +26,7 @@ def stonks():
         capital = data.get("capital")
         timeline = data.get("timeline")
         stocks_dic = getprice(timeline)
-        logging.info("My stocks_dic :{}".format(stocks_dic))
+        logging.info("My stocks_dic :{}\n energy: {}\n capital: {} ".format(stocks_dic,energy,capital))
         profit_res,output_res = 0,None
         for stock in stocks_dic.keys():
             profit,output = maxprofit(energy,capital,stocks_dic[stock])
