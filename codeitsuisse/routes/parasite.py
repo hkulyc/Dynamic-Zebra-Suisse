@@ -30,7 +30,7 @@ class Board:
         py = [0, -1, 0, 1]
         board = [ [ 100 for i in range(self.col)] for _ in range(self.row)]
         board[self.start_x][self.start_y] = 0
-        queue.append(self.start_x,self.start_y)
+        queue.append( (self.start_x,self.start_y) )
         while len(queue) > 0:
             x,y = queue.pop()
             for i in range(4):
