@@ -142,7 +142,7 @@ def tictactoe():
     logging.info("tictactoe received: {}".format(data))
     id = data.get('battleId')
     new_game = TicTacToe(arena, id)
-    r = requests.get(url = arena+'start/'+id, strream = True)
+    r = requests.get(url = arena+'start/'+id, stream = True)
     for line in r.iter_lines():
         r = line
         break
@@ -164,7 +164,7 @@ def tictactoe():
             my_turn = False
         else:
             while True:
-                r = requests.get(url = arena+'start/'+id, stream = True)
+                # r = requests.get(url = arena+'start/'+id, stream = True)
                 for line in r.iter_lines():
                     r = line
                     break
