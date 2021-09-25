@@ -14,11 +14,11 @@ class Board:
         self.board = board
         self.row = len(board)
         self.col = len(board[0])
-        self.interest = interest
+        self.interest = [(int(i),int(j)) for i,j in interest.split(',')]
         self.start_x,self.start_y = None,None
         self.findstartpoint()
     def __repr__(self) -> str:
-        return str(self.board),str(self.start_x),str(self.start_y)
+        return str(self.board)+str(self.start_x)+str(self.start_y)
     def findstartpoint(self):
         for i,row in enumerate(self.board):
             for j,value in enumerate(row):
@@ -36,8 +36,7 @@ class Board:
             for i in range(4):
                 go_x,go_y = x+px[i],y+py[i]
                 if go_x < self.row and go_x>0 and go_y < self.col and go_y > 0 and self.board[go_x][go_y] != 0 :
-                    board[go_x] = min( board[x] + 1,board[x])
-                    board[go_y] = min( board[y] + 1,board[y])
+                    board[go_x][go_y] = min( board[x][y]  + 1,board[x][y] )
                     queue.append( (go_x,go_y) )
         for i,j in self.interest:
             if self.board[go_x][go_y] != 0:
@@ -54,6 +53,7 @@ def parasite():
     #logging.info("received: {}".format(datas))
     for index,data in enumerate(datas):
         res_dic = {'room':index}
+        logging.info("received: {}".format(datas))
         board = Board(data['grid'],data['interestedIndividuals'])
         logging.info("board: {}".format(board))
         p1 = {}
