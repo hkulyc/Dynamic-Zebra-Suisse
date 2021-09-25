@@ -1,13 +1,13 @@
 import logging
 import json
 
-from flask import request, jsonify
-import requests
+# from flask import request, jsonify
+# import requests
 
-from codeitsuisse import app
+# from codeitsuisse import app
 
-logger = logging.getLogger(__name__)
-arena = 'https://cis2021-arena.herokuapp.com/quoridor/'
+# logger = logging.getLogger(__name__)
+# arena = 'https://cis2021-arena.herokuapp.com/quoridor/'
 
 def findEmpty(board):
     "given a matrix, find the last step to win, return None otherwise"
@@ -125,6 +125,7 @@ class Quoridor:
                 return False
             if ano == new:
                 return False
+            return True
         elif x_diff in (-2,2) and y_diff == 0:
             if (old[0]+x_diff/2, old[1]) == ano:
                 return valid(ano, new, None)
@@ -177,7 +178,7 @@ class Quoridor:
     
 # pos_map = {(0,0): 'NW', (1,0): 'W', (2,0): 'SW', (0,1): 'N', (1,1): 'C',(2,1): 'S', (0,2): 'NE',(1,2): 'E', (2,2): 'SE'}
 
-def flip(pos):
+def flip():
     res = {}
     res['action'] = '(╯°□°)╯︵ ┻━┻'
     return res
@@ -199,89 +200,89 @@ def decode_pos(pos):
     return (ord(pos[0]) - 96, int(pos[1]))
 
 
-@app.route('/quoridor', methods=['POST'])
-def quoridor():
-    return main(request)
+# @app.route('/quoridor', methods=['POST'])
+# def quoridor():
+#     return main(request)
     # except:
     #     return ''
 
-def main(request):
-    data = request.get_json()
-    logging.info("quoridor received: {}".format(data))
-    id = data.get('battleId')
-    new_game = Quoridor(arena, id)
-    r = requests.get(url = arena+'start/'+id, stream = True).iter_lines()
-    data = next(r)
-    while data == b'':
-        data = next(r)
-    data = data[6:]
-    # extracting data in json format
-    data = json.loads(data)
-    logging.info("quoridor received: {}".format(data))
-    new_game.setSymbol(data.get('youAre'))
-    # logging.info("symbol: {}".format(new_game.symbol))
-    my_turn = (new_game.symbol == 'first')
-    while data.get('winner') == None:
-        if my_turn:
-            pos = new_game.nextMove()
-            res = move(pos)
-            logging.info("My move: {}".format(res))
-            new_game.move(pos, False)
-            requests.post(url = arena+'play/'+id, json = res)
-            my_turn = False
-            None
-        else:
-            # r = requests.get(url = arena+'start/'+id, stream = True)
-            while True:
-                data = next(r)
-                while data == b'':
-                    data = next(r)
-                data = data[6:]
-                data = json.loads(data)
-                logging.info("quoridor received: {}".format(data))
-                pos_string = data.get('position', None)
-                pos = None
-                try:
-                    pos = decode_pos(pos_string)
-                except:
-                    pos = None
-                if pos == None:
-                    data = {'winner': 'me'}
-                    res = flip()
-                    logging.info("My move: {}".format(res))
-                    requests.post(url = arena+'play/'+id, json = res)
-                    break
-                    # return ''
-                if data.get('player') != new_game.symbol:
-                    if not new_game.move(pos, True):
-                        res = flip()
-                        logging.info("My move: {}".format(res))
-                        requests.post(url = arena+'play/'+id, json = res)
-                        break
-                    my_turn = True
-                    break
-                else:
-                    # if move != None and pos != pos_map[move]:
-                    #     res = create_action(None)
-                    #     logging.info("My move: {}".format(res))
-                    #     requests.post(url = arena+'play/'+id, json = res)
-                    # break
-                    None
-    # inputValue = data.get("input");
-    # result = inputValue * inputValue
-    logging.info('quoridor finished!')
-    return ''
+# def main(request):
+#     data = request.get_json()
+#     logging.info("quoridor received: {}".format(data))
+#     id = data.get('battleId')
+#     new_game = Quoridor(arena, id)
+#     r = requests.get(url = arena+'start/'+id, stream = True).iter_lines()
+#     data = next(r)
+#     while data == b'':
+#         data = next(r)
+#     data = data[6:]
+#     # extracting data in json format
+#     data = json.loads(data)
+#     logging.info("quoridor received: {}".format(data))
+#     new_game.setSymbol(data.get('youAre'))
+#     # logging.info("symbol: {}".format(new_game.symbol))
+#     my_turn = (new_game.symbol == 'first')
+#     while data.get('winner') == None:
+#         if my_turn:
+#             pos = new_game.nextMove()
+#             res = move(pos)
+#             logging.info("My move: {}".format(res))
+#             new_game.move(pos, False)
+#             requests.post(url = arena+'play/'+id, json = res)
+#             my_turn = False
+#             None
+#         else:
+#             # r = requests.get(url = arena+'start/'+id, stream = True)
+#             while True:
+#                 data = next(r)
+#                 while data == b'':
+#                     data = next(r)
+#                 data = data[6:]
+#                 data = json.loads(data)
+#                 logging.info("quoridor received: {}".format(data))
+#                 pos_string = data.get('position', None)
+#                 pos = None
+#                 try:
+#                     pos = decode_pos(pos_string)
+#                 except:
+#                     pos = None
+#                 if pos == None:
+#                     data = {'winner': 'me'}
+#                     res = flip()
+#                     logging.info("My move: {}".format(res))
+#                     requests.post(url = arena+'play/'+id, json = res)
+#                     break
+#                     # return ''
+#                 if data.get('player') != new_game.symbol:
+#                     if not new_game.move(pos, True):
+#                         res = flip()
+#                         logging.info("My move: {}".format(res))
+#                         requests.post(url = arena+'play/'+id, json = res)
+#                         break
+#                     my_turn = True
+#                     break
+#                 else:
+#                     # if move != None and pos != pos_map[move]:
+#                     #     res = create_action(None)
+#                     #     logging.info("My move: {}".format(res))
+#                     #     requests.post(url = arena+'play/'+id, json = res)
+#                     # break
+#                     None
+#     # inputValue = data.get("input");
+#     # result = inputValue * inputValue
+#     logging.info('quoridor finished!')
+#     return ''
 
 
-# if __name__ == "__main__":
-#     test = Quoridor('asdf', '35efas')
-#     test.setSymbol('first')
-#     test.print()
-#     while True:
-#         x = int(input())
-#         y = int(input())
-#         test.move((x,y), True)
-#         res = test.nextMove()
-#         print(res)
-#         test.move(res, False)
-#         test.print()
+if __name__ == "__main__":
+    test = Quoridor('asdf', '35efas')
+    test.setSymbol('second')
+    test.print()
+    while True:
+        x = int(input())
+        y = int(input())
+        print(test.move((x,y), True))
+        res = test.nextMove()
+        print(res)
+        test.move(res, False)
+        test.print()
