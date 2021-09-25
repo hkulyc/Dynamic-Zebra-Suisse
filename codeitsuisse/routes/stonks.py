@@ -45,7 +45,8 @@ def maxprofit(energy,capital,stock):
     result = {}
     # inital 
     for i in range(min(qtys[0],int(capital/prices_go[0]))+1):
-        result = { i:[-i*prices[0] for _ in range(length)],'qty'+str(i): [ j for j in qtys]}
+        result[i] = [-i*prices[0] for _ in range(length)]
+        result['qty'+str(i)] = [ j for j in qtys]
         result['qty'+str(i)][0] -= i
     logging.info("logging :{}".format(result))
     #dp 
