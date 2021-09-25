@@ -9,7 +9,7 @@ import requests
 from codeitsuisse import app
 
 logger = logging.getLogger(__name__)
-arena = 'https://cis2021-arena.herokuapp.com//parasite/'
+arena = 'https://cis2021-arena.herokuapp.com/parasite/'
 
 class Board:
     def __init__(self,board,interest):
@@ -52,7 +52,7 @@ class Board:
 
 
 
-@app.route('/tic-tac-toe', methods=['POST'])
+@app.route('/parasite', methods=['POST'])
 def parasite():
     datas = request.get_json()
     res = []
