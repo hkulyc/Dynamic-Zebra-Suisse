@@ -16,6 +16,7 @@ class Board:
         self.col = len(board[0])
         self.interest = interest
         self.start_x,self.start_y = None,None
+        self.findstartpoint()
     def findstartpoint(self):
         for i,row in enumerate(self.board):
             for j,value in enumerate(row):
