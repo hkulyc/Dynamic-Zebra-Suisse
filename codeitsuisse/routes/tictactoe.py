@@ -151,8 +151,8 @@ def tictactoe():
     data = json.loads(data)
     logging.info("tictactoe received: {}".format(data))
     new_game.setSymbol(data.get('youAre'))
-    logging.info("symbol: {}".format(new_game.symbol))
-    my_turn = (new_game.symbol == '0')
+    # logging.info("symbol: {}".format(new_game.symbol))
+    my_turn = (new_game.symbol == 'O')
 
     while data.get('winner') == None:
         if my_turn:
