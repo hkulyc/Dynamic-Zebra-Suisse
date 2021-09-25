@@ -14,6 +14,7 @@ class Board:
         self.board = board
         self.row = len(board)
         self.col = len(board[0])
+        self.interest = []
         for i in interest:
             a,b = i.split(",")
             self.interest.append( (int(a),int(b)) )
