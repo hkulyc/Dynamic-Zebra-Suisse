@@ -134,7 +134,7 @@ def createAction(pos):
 
 
 @app.route('/tic-tac-toe', methods=['POST'])
-def evaluate():
+def tictactoe():
     data = request.get_json()
     logging.info("tictactoe received: {}".format(data))
     inputValue = data.get("input");
