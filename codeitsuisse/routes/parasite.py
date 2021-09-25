@@ -14,7 +14,7 @@ class Board:
         self.board = board
         self.row = len(board)
         self.col = len(board[0])
-        self.interest = interest
+        self.interest = [(int(i),int(j)) for i,j in interest.split(',')]
         self.start_x,self.start_y = None,None
         self.findstartpoint()
     def __repr__(self) -> str:
@@ -53,6 +53,7 @@ def parasite():
     #logging.info("received: {}".format(datas))
     for index,data in enumerate(datas):
         res_dic = {'room':index}
+        logging.info("received: {}".format(datas))
         board = Board(data['grid'],data['interestedIndividuals'])
         logging.info("board: {}".format(board))
         p1 = {}
