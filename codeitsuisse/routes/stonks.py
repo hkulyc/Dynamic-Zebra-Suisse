@@ -64,12 +64,12 @@ def maxprofit(energy,capital,stock):
         for j in range(len(result)): # for diferent result 
             money = result[j][i-1] # money you have 
             price = prices[i]
-            buy_amount = min( money // price, result['qty'+str(i)][i%(length//2)])
-            temp_list = [result[k][i-1] + (j-k) * prices[i] for k in range(len(result)) ]
+            buy_amount = min( 0, money // price, result['qty'+str(i)][i%(length//2)])
+            temp_list = [result[k][i-1] + (j-k)*prices[i] for k in range(len(result)//2) ]
             result[j][i] =  max(temp_list) # this year 
             result['qty'+str(j)][i%(length//2)] -= (j-temp_list.index(result[j][i])) if  (j-temp_list.index(result[j][i])) > 0 else 0
-            if j + buy_amount > len(result) :
-                for k in range(j + buy_amount - len(result)):
+            if j + buy_amount > len(result)//2 :
+                for k in range(j + buy_amount - len(result)//2):
                     result[j+k] = [ _ for _ in result[j] ]
                     result[j+k][i] = result[j+k][i] - (k+1)*price
                     result['qty'+str(j)] = [_ for _ in result[j]]
