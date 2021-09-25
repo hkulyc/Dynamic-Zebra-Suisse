@@ -203,8 +203,8 @@ def decode_pos(pos):
 @app.route('/quoridor', methods=['POST'])
 def quoridor():
     return main(request)
-    except:
-        return ''
+    # except:
+    #     return ''
 
 def main(request):
     data = request.get_json()
