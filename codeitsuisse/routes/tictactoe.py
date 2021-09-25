@@ -177,6 +177,7 @@ def tictactoe():
                     data = next(r)
                 data = data[6:]
                 data = json.loads(data)
+                logging.info("tictactoe received: {}".format(data))
                 if data.get['player'] == None:
                     break
                 if data.get['player'] != new_game.symbol:
