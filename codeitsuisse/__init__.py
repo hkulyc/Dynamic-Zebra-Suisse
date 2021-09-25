@@ -5,5 +5,6 @@ import codeitsuisse.routes.square
 import codeitsuisse.routes.tictactoe
 import codeitsuisse.routes.stonks
 import codeitsuisse.routes.quoridor
+import codeitsuisse.routes.parasite
 
 
