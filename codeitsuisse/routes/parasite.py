@@ -38,7 +38,7 @@ class Board:
                 if go_x < self.row and go_x>0 and go_y < self.col and go_y > 0 and self.board[go_x][go_y] != 0 :
                     board[go_x] = min( board[x] + 1,board[x])
                     board[go_y] = min( board[y] + 1,board[y])
-                    queue.append(go_x,go_y)
+                    queue.append( (go_x,go_y) )
         for i,j in self.interest:
             if self.board[go_x][go_y] != 0:
                 p1[str(i)+','+str(j)] = board[i][j]
