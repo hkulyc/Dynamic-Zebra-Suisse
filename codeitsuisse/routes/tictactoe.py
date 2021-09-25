@@ -144,11 +144,11 @@ def tictactoe():
     new_game = TicTacToe(arena, id)
     r = requests.get(url = arena+'start/'+id, stream = True)
     for line in r.iter_lines():
-        r = line
+        data = line
         break
-    r = r[6:]
+    data = data[6:]
     # extracting data in json format
-    data = json.loads(r)
+    data = json.loads(data)
     logging.info("tictactoe received: {}".format(data))
     new_game.setSymbol(data.get('youAre'))
 
@@ -166,10 +166,10 @@ def tictactoe():
             while True:
                 # r = requests.get(url = arena+'start/'+id, stream = True)
                 for line in r.iter_lines():
-                    r = line
+                    data = line
                     break
-                r = r[6:]
-                data = json.loads(r)
+                data = data[6:]
+                data = json.loads(data)
                 if data.get['player'] == None:
                     break
                 if data.get['player'] != new_game.symbol:
