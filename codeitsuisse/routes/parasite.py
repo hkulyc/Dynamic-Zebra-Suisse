@@ -17,6 +17,8 @@ class Board:
         self.interest = interest
         self.start_x,self.start_y = None,None
         self.findstartpoint()
+    def __repr__(self) -> str:
+        return str(self.board),str(self.start_x),str(self.start_y)
     def findstartpoint(self):
         for i,row in enumerate(self.board):
             for j,value in enumerate(row):
@@ -49,10 +51,11 @@ class Board:
 def parasite():
     datas = request.get_json()
     res = []
-    logging.info("received: {}".format(datas))
+    #logging.info("received: {}".format(datas))
     for index,data in enumerate(datas):
         res_dic = {'room':index}
         board = Board(data['grid'],data['interestedIndividuals'])
+        logging.info("board: {}".format(board))
         p1 = {}
         board.bfs(p1)
         res_dic['p1'] = p1
