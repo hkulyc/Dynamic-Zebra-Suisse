@@ -1,40 +1,31 @@
-import logging
-import json
+# import logging
+# import json
 
-from flask import request, jsonify
+# from flask import request, jsonify
 
-from codeitsuisse import app
+# from codeitsuisse import app
 
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 
-"""
-ile "/app/codeitsuisse/routes/stonks.py", line 22, in stonks
-2021-09-25T06:56:47.567908+00:00 app[web.1]:     profit,output = maxprofit(energy,capital,stocks_dic[stock])
-2021-09-25T06:56:47.567909+00:00 app[web.1]:   File "/app/codeitsuisse/routes/stonks.py", line 58, in maxprofit
-2021-09-25T06:56:47.567909+00:00 app[web.1]:     temp_list = [result[k][i-1] + (j-k) * price[i] for k in range(len(result)) ]
-2021-09-25T06:56:47.567909+00:00 app[web.1]:   File "/app/codeitsuisse/routes/stonks.py", line 58, in <listcomp>
-2021-09-25T06:56:47.567910+00:00 app[web.1]:     temp_list = [result[k][i-1] + (j-k) * price[i] for k in range(len(result)) ]
-2021-09-25T06:56:47.567910+00:00 app[web.1]: TypeError: 'int' object is not subscriptable
-"""
 
-@app.route('/stonks', methods=['POST'])
-def stonks():
-    datas = request.get_json()
-    logging.info("received :{} ".format(datas))
-    #logging.info("data sent for evaluation {}".format(data))
-    for data in datas:
-        energy = data.get("energy")
-        capital = data.get("capital")
-        timeline = data.get("timeline")
-        stocks_dic = getprice(timeline)
-        profit_res,output_res = 0,None
-        for stock in stocks_dic.keys():
-            profit,output = maxprofit(energy,capital,stocks_dic[stock])
-            if profit > profit_res:
-                profit_res,output_res = profit,output
-        logging.info("My profit :{}".format(profit_res))
-        logging.info("My result :{}".format(output_res))
-    return json.dumps(output_res)
+# @app.route('/stonks', methods=['POST'])
+# def stonks():
+#     datas = request.get_json()
+#     logging.info("received :{} ".format(datas))
+#     logging.info("data sent for evaluation {}".format(data))
+#     for data in datas:
+#         energy = data.get("energy")
+#         capital = data.get("capital")
+#         timeline = data.get("timeline")
+#         stocks_dic = getprice(timeline)
+#         profit_res,output_res = 0,None
+#         for stock in stocks_dic.keys():
+#             profit,output = maxprofit(energy,capital,stocks_dic[stock])
+#             if profit > profit_res:
+#                 profit_res,output_res = profit,output
+#         logging.info("My profit :{}".format(profit_res))
+#         logging.info("My result :{}".format(output_res))
+#     return json.dumps(output_res)
 def getprice(timeline):
     stocks_dic = {}
     for i in timeline['2037'].keys():
@@ -58,9 +49,12 @@ def maxprofit(energy,capital,stock):
         result[i] = [-i*prices[0] for _ in range(length)]
         result['qty'+str(i)] = [ j for j in qtys]
         result['qty'+str(i)][0] -= i
-    logging.info("logging :{}".format(result))
-    logging.info("prices :{}".format(prices))
-    logging.info("length :{}".format(length))
+    # logging.info("logging :{}".format(result))
+    # logging.info("prices :{}".format(prices))
+    # logging.info("length :{}".format(length))
+    print("logging :{}".format(result))
+    print("prices :{}".format(prices))
+    print("length :{}".format(length))
     #dp 
     for i in range(1,length): # for every year
         for j in range(len(result)// 2): # for diferent result 
@@ -87,5 +81,18 @@ def maxprofit(energy,capital,stock):
 
 
 if __name__ == "__main__":
-   
-    maxprofit(energy,capital,stock)
+    dic1 = {'energy': 6, 'capital': 250, 'timeline': {'2037': {'Apple': {'price': 102, 'qty': 39}, 'BitCoin': {'price': 349,'qty': 64}}, '2034': {'Apple': {'price': 113, 'qty': 54}, 'BitCoin': {'price': 298, 'qty': 42}}}}
+    dic2 = {'energy': 4, 'capital': 200, 'timeline': {'2037': {'Apple': {'price': 106, 'qty': 16}}, '2036': {'Apple': {'price': 119, 'qty': 28}}, '2035': {'Apple': {'price': 112, 'qty': 26}}}}
+    list = [dic1,dic2]
+    for data in list:
+        energy = data.get("energy")
+        capital = data.get("capital")
+        timeline = data.get("timeline")
+        stocks_dic = getprice(timeline)
+        profit_res,output_res = 0,None
+        for stock in stocks_dic.keys():
+            profit,output = maxprofit(energy,capital,stocks_dic[stock])
+            if profit > profit_res:
+                profit_res,output_res = profit,output
+        logging.info("My profit :{}".format(profit_res))
+        logging.info("My result :{}".format(output_res))
