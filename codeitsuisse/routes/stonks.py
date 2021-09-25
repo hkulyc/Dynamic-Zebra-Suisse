@@ -6,16 +6,6 @@ from flask import request, jsonify;
 from codeitsuisse import app;
 
 logger = logging.getLogger(__name__)
-""""2037":{
-     "Apple":{
-       "price":100,
-       "qty":10
-     }
-   },
-   "2036":{
-     "Apple":{
-       "price":10,
-       "qty":50"""
 
 @app.route('/stonks', methods=['POST'])
 def evaluate():
@@ -30,10 +20,8 @@ def evaluate():
         profit,output = maxprofit(energy,capital,stocks_dic[stock])
         if profit > profit_res:
             profit_res,output_res = profit,output
-    
-
-    logging.info("My profit :{}".format(profit))
-    logging.info("My result :{}".format(output))
+    logging.info("My profit :{}".format(profit_res))
+    logging.info("My result :{}".format(output_res))
     return json.dumps(output);
 def getprice(timeline):
     stocks_dic = {}
@@ -47,24 +35,39 @@ def getprice(timeline):
 
 def maxprofit(energy,capital,stock):
     # TODO pretend only one stock
-    len = energy // 2
-    prices_go = stock['price'][-len:]
-    prices_back = stock['price'][-len::-1]
-    qtys_go = stock['qty'][-len:]
-
+    length = (energy//2) *2
+    prices_go = stock['price'][-length//2:]
+    prices_back = stock['price'][-length//2::-1]
+    qtys = stock['qty'][-length:]
+    prices = prices_go +  prices_back
     result = {}
     # inital 
-    amount = min(qtys[0],int(capital/prices[0]))
-    result = { 0:[-i*prices[0] for _ in range(len)]}
+    for i in range(min(qtys[0],int(capital/prices_go[0]))+1):
+        result = { i:[-i*prices[0] for _ in range(length)],'qty'+str(i): [ j for j in qtys]}
+        result['qty'+str(i)][0] -= i
     
     # dp 
-    for i in range(len):
-        for j in range(len(result)):
-        result[]
-    for(int i = 1; i < n; i++){             
-        dp0[i] = max(dp0[i-1], dp1[i-1] + prices[i]);
-        dp1[i] = max(dp1[i-1], dp0[i-1] - prices[i]);
-    }
+    for i in range(1,length): # for every year
+        for j in range(len(result)): # for diferent result 
+            money = result[j][i-1] # money you have 
+            price = prices[i]
+            buy_amount = min( money // price, result['qty'+str(i)][i%(length//2)])
+            temp_list = [result[k][i-1] + (j-k) * price[i] for k in range(len(result)) ]
+            result[j][i] =  max(temp_list) # this year 
+            result['qty'+str(j)][i%(length//2)] -= (j-temp_list.index(result[j][i])) if  (j-temp_list.index(result[j][i])) > 0 else 0
+            if j + buy_amount > len(result) :
+                for k in range(j + buy_amount - len(result)):
+                    result[j+k] = [ _ for _ in result[j] ]
+                    result[j+k][i] = result[j+k][i] - (k+1)*price
+                    result['qty'+str(j)] = [_ for _ in result[j]]
+                    result['qty'+str(j)] -= k+1
+        if len(result) == 0:
+            for i in range(min(qtys[0],int(capital/prices_go[0]))+1):
+                result = { i:[-i*prices[0] for _ in range(length)],'qty'+str(i): [ j for j in qtys]}
+                result['qty'+str(i)][0] -= i
+    
+    return result[0][length-1],result['qty0']
+
 
 
     
