@@ -37,7 +37,7 @@ class Board:
             x,y = queue.pop()
             for i in range(4):
                 go_x,go_y = x+px[i],y+py[i]
-                if go_x < self.row and go_x>0 and go_y < self.col and go_y > 0 and self.board[go_x][go_y] != 0 :
+                if go_x < self.row and go_x>0 and go_y < self.col and go_y > 0 and self.board[go_x][go_y] != 0 and not visited[go_x][go_y]  :
                     board[go_x][go_y] = min( board[x][y]  + 1,board[x][y] )
                     visited[go_x][go_y] = True
                     queue.append( (go_x,go_y) )
