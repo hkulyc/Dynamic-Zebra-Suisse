@@ -7,7 +7,7 @@ import requests
 from codeitsuisse import app
 
 logger = logging.getLogger(__name__)
-arena = 'https://cis2021-arena.herokuapp.com/tic-tac-toe/'
+arena = 'https://cis2021-arena.herokuapp.com/quoridor/'
 
 def findEmpty(board):
     "given a matrix, find the last step to win, return None otherwise"
@@ -221,7 +221,7 @@ def main(request):
     logging.info("quoridor received: {}".format(data))
     new_game.setSymbol(data.get('youAre'))
     # logging.info("symbol: {}".format(new_game.symbol))
-    my_turn = (new_game.symbol == 'O')
+    my_turn = (new_game.symbol == 'First')
     while data.get('winner') == None:
         if my_turn:
             pos = new_game.nextMove()
