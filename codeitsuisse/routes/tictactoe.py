@@ -181,8 +181,12 @@ def tictactoe():
                 if data.get('player') == None:
                     break
                 if data.get('player') != new_game.symbol:
-                    pos_string = data['position']
-                    pos = list(pos_map.keys())[list(pos_map.values()).index(pos_string)]
+                    pos_string = data.get('position')
+                    pos = None
+                    try:
+                        pos = list(pos_map.keys())[list(pos_map.values()).index(pos_string)]
+                    except:
+                        pos = None
                     if not new_game.add(pos, True):
                         res = create_action(None)
                         logging.info("My move: {}".format(res))
