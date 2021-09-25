@@ -152,59 +152,64 @@ def tictactoe():
     new_game = TicTacToe(arena, id)
     r = requests.get(url = arena+'start/'+id, stream = True).iter_lines()
     data = next(r)
-    while data == b'':
-        data = next(r)
-    data = data[6:]
-    # extracting data in json format
-    data = json.loads(data)
-    logging.info("tictactoe received: {}".format(data))
-    new_game.setSymbol(data.get('youAre'))
-    # logging.info("symbol: {}".format(new_game.symbol))
-    my_turn = (new_game.symbol == 'O')
+    try:
+        # while data == b'':
+        #     data = next(r)
+        data = data[6:]
+        # extracting data in json format
+        data = json.loads(data)
+        logging.info("tictactoe received: {}".format(data))
+        new_game.setSymbol(data.get('youAre'))
+        # logging.info("symbol: {}".format(new_game.symbol))
+        my_turn = (new_game.symbol == 'O')
 
-    while data.get('winner') == None:
-        if my_turn:
-            move = new_game.nextMove()
-            res = create_action(move)
-            logging.info("My move: {}".format(res))
-            new_game.add(move, False)
-            requests.post(url = arena+'play/'+id, json = res)
-            my_turn = False
-            None
-        else:
-            while True:
-                # r = requests.get(url = arena+'start/'+id, stream = True)
-                data = next(r)
-                while data == b'':
+        while data.get('winner') == None:
+            if my_turn:
+                move = new_game.nextMove()
+                res = create_action(move)
+                logging.info("My move: {}".format(res))
+                new_game.add(move, False)
+                requests.post(url = arena+'play/'+id, json = res)
+                my_turn = False
+                None
+            else:
+                while True:
+                    # r = requests.get(url = arena+'start/'+id, stream = True)
                     data = next(r)
-                data = data[6:]
-                data = json.loads(data)
-                logging.info("tictactoe received: {}".format(data))
-                if data.get('player') == None:
-                    break
-                pos_string = data.get('position')
-                pos = None
-                try:
-                    pos = list(pos_map.keys())[list(pos_map.values()).index(pos_string)]
-                except:
+                    # while data == b'':
+                    #     data = next(r)
+                    data = data[6:]
+                    data = json.loads(data)
+                    logging.info("tictactoe received: {}".format(data))
+                    if data.get('player') == None:
+                        break
+                    pos_string = data.get('position')
                     pos = None
-                if data.get('player') != new_game.symbol:
-                    if not new_game.add(pos, True):
-                        res = create_action(None)
-                        logging.info("My move: {}".format(res))
-                        new_game.add(move, False)
-                        requests.post(url = arena+'play/'+id, json = res)
-                        return ''
-                    my_turn = True
-                    break
-                else:
-                    None
+                    try:
+                        pos = list(pos_map.keys())[list(pos_map.values()).index(pos_string)]
+                    except:
+                        pos = None
+                    if data.get('player') != new_game.symbol:
+                        if not new_game.add(pos, True):
+                            res = create_action(None)
+                            logging.info("My move: {}".format(res))
+                            requests.post(url = arena+'play/'+id, json = res)
+                            return ''
+                        my_turn = True
+                        break
+                    else:
+                        None
 
-    result = {}
-    # inputValue = data.get("input");
-    # result = inputValue * inputValue
-    logging.info('tictactoe finished!')
-    return json.dumps(result)
+        result = {}
+        # inputValue = data.get("input");
+        # result = inputValue * inputValue
+        logging.info('tictactoe finished!')
+        return json.dumps(result)
+    except:
+        res = create_action(None)
+        logging.info("My move: {}".format(res))
+        requests.post(url = arena+'play/'+id, json = res)
+        return ''
 
 
 if __name__ == "__main__":
