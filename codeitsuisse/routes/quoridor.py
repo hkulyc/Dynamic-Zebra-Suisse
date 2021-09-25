@@ -128,12 +128,12 @@ class Quoridor:
             return True
         elif x_diff in (-2,2) and y_diff == 0:
             if (old[0]+x_diff/2, old[1]) == ano:
-                return valid(ano, new, None)
+                return self.valid(ano, new, None)
             else:
                 return False
         elif y_diff in (-2,2) and x_diff == 0:
             if (old[0], old[1]+y_diff/2) == ano:
-                return valid(ano, new, None)
+                return self.valid(ano, new, None)
             else:
                 return False
         else:
